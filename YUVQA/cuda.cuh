@@ -1,3 +1,6 @@
+#ifndef CUDA_CUH
+#define CUDA_CUH
+
 
 #include "config.h"
 
@@ -53,4 +56,6 @@ cudaError_t run_process_cuda_shared_mem(const int* ref, const int* rec, int* dev
 cudaError_t run_process_cuda_shared_mem(const int* ref, const int* rec, const double* weights, double* wspsnr_frame, const double w_sum, const  int w, int h, int bitDepth, int nf );
 cudaError_t run_process_cuda(const int* ref, const int* rec, int* dev_ref, int* dev_rec, double* dev_weights, double* sqdiff_weighted, const double* weights, double* wspsnr_frame, const double w_sum, const  int w, int h, int bitDepth, int nf );
 
-#endif
+#endif //USE_CUDA
+
+#endif  //CUDA_CUH

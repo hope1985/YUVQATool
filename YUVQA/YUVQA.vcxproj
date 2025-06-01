@@ -149,7 +149,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="wspsnr.h" />
+    <ClCompile Include="normal_loop.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="commons.h" />
@@ -159,10 +159,10 @@
     <ClInclude Include="yuv_file_handler.h" />
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="wspsnr_cuda.cu">
+    <CudaCompile Include="cuda.cu">
       <FileType>Document</FileType>
     </CudaCompile>
-    <CudaCompile Include="wspsnr_cuda.cuh" />
+    <CudaCompile Include="cuda.cuh" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -18,7 +18,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="wspsnr.h">
+    <ClCompile Include="normal_loop.h">
       <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -40,10 +40,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="wspsnr_cuda.cu">
+    <CudaCompile Include="cuda.cu">
       <Filter>Source Files</Filter>
     </CudaCompile>
-    <CudaCompile Include="wspsnr_cuda.cuh">
+    <CudaCompile Include="cuda.cuh">
       <Filter>Header Files</Filter>
     </CudaCompile>
   </ItemGroup>

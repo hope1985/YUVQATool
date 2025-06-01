@@ -43,8 +43,8 @@ static double simd_sum(double* data, size_t len) {
     return sum;
 }
 
-
-static double simd_sse(const float* refPic, const float* recPic, double* sse_row, int W, int H,int lh,int uh,int lw,int uw)
+template<class T>
+static double simd_sse(const T* refPic, const T* recPic, double* sse_row, int W, int H,int lh,int uh,int lw,int uw)
 {
 
 #pragma omp parallel for 
@@ -317,7 +317,6 @@ static double wspsnr_openmp_simd(const int* refPic, const int* recPic, int W, in
 }
 
 
-
 #if COMPUTE_DTYPE_IDX == DTYPE_FLOAT
 static double psnr_openmp_simd(const float* refPic, const float* recPic, int W, int H, int bitDepth, vector<int>* roi = NULL)
 #elif COMPUTE_DTYPE_IDX == DTYPE_DOUBLE
@@ -455,7 +454,7 @@ static double psnr_openmp_simd(const int* refPic, const int* recPic, int W, int 
     simd_sse(refPic, recPic, sse_row, W, H, lh, uh, lw, uw);
 
     double sse_sum = simd_sum(sse_row, roiH);
-
+    sse_sum = sse_sum / (roiH * roiW);
 #ifdef _WIN32
     _aligned_free(sse_row);
    

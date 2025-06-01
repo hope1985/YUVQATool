@@ -1,12 +1,17 @@
 #ifndef CONFIG
 #define CONFIG
 
-#define USE_SMID 0
+
+#define PSNR_METRIC 0
+#define WSPSNR_ERP_METRIC 1
+
+#define USE_SIMD 0
 #define USE_OPENCV 1
 #define USE_CUDA 2
 #define USE_OPENMP 3
 #define USE_NORMAL_LOOP 4
-#define MODE USE_SMID
+
+#define MODE USE_SIMD
 
 
 #define DTYPE_DOUBLE 10
@@ -14,9 +19,9 @@
 #define DTYPE_INT    30
 #define DTYPE_SHORT  40
 
-#if MODE==USE_SMID
-#define COMPUTE_DTYPE float
-#define COMPUTE_DTYPE_IDX DTYPE_FLOAT
+#if MODE==USE_SIMD
+#define COMPUTE_DTYPE int
+#define COMPUTE_DTYPE_IDX DTYPE_INT
 #elif  MODE==USE_OPENMP  || MODE==USE_NORMAL_LOOP 
 #define COMPUTE_DTYPE short
 #define COMPUTE_DTYPE_IDX DTYPE_SHORT

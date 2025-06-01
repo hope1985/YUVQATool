@@ -3,7 +3,7 @@
 #include "config.h"
 
 #if MODE==USE_CUDA
-#include "wspsnr_cuda.cuh"
+#include "cuda.cuh"
 #include <chrono>
 
 #include <thrust/reduce.h>
