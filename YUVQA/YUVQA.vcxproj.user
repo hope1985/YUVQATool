@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LocalDebuggerCommandArguments> -roi [100,2200,200,2800] -w 6144 -h 3072 -bd 8 -sf 0  -nf 20 -i  "\\stimul-nas-01.ens.ad.etsmtl.ca\DATA-1\MediaDataBase\HosseinTempData\Fast-Affine-VVenc\LinuxServer-Results\thr1.0_240f-RA-medium\Landing2-q27-thr1.0.yuv"  -r  "\\stimul-nas-01.ens.ad.etsmtl.ca\DATA-1\MediaDataBase\HosseinTempData\Fast-Affine-VVenc\CTC360-240frames\Landing2_6144x3072_30fps_8bit_420_erp.yuv"</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments> -roi [100,2200,200,2800] -w 6144 -h 3072 -bd 8 -sf 0  -nf 3  -i  "\\stimul-nas-01.ens.ad.etsmtl.ca\DATA-1\MediaDataBase\HosseinTempData\Fast-Affine-VVenc\LinuxServer-Results\thr1.0_240f-RA-medium\Landing2-q27-thr1.0.yuv"  -r  "\\stimul-nas-01.ens.ad.etsmtl.ca\DATA-1\MediaDataBase\HosseinTempData\Fast-Affine-VVenc\CTC360-240frames\Landing2_6144x3072_30fps_8bit_420_erp.yuv"  -roi [100,400,500,1000]</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

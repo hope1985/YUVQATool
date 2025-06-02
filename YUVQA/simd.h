@@ -44,7 +44,7 @@ static double simd_sum(double* data, size_t len) {
 }
 
 template<class T>
-static double simd_sse(const T* refPic, const T* recPic, double* sse_row, int W, int H,int lh,int uh,int lw,int uw)
+static void simd_sse(const T* refPic, const T* recPic, double* sse_row, int W, int H,int lh,int uh,int lw,int uw)
 {
 
 #pragma omp parallel for 

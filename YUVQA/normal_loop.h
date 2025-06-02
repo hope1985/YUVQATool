@@ -98,7 +98,7 @@ static double wspsnr(const T* refPic, const T* recPic, int W, int H, int bitDept
 #pragma omp parallel for
 #endif
     for (int hi = lh; hi < uh; ++hi) {
-        auto row_st_idx = hi * roiW;
+        auto row_st_idx = hi * W;
         for (int wi = lw; wi < uw; ++wi) {
 
             int diff = refPic[row_st_idx + wi] - recPic[row_st_idx + wi];
@@ -148,16 +148,15 @@ static double psnr(const T* refPic, const T* recPic, int W, int H, int bitDepth,
         roiW = uw - lw;
     }
 
-
+    
 #if MODE==USE_OPENMP
     std::vector<double> sse_sum_row(roiH);
 #pragma omp parallel for
 #endif
     for (int hi = lh; hi < uh; ++hi) {
-        auto row_st_idx = hi * roiW;
+        auto row_st_idx = hi * W;
         int roi_hi = hi - lh;
         for (int wi = lw; wi < uw; ++wi) {
-
             int diff = refPic[row_st_idx + wi] - recPic[row_st_idx + wi];
 
 #if MODE==USE_OPENMP

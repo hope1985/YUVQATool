@@ -29,8 +29,8 @@ static string ref_inDir = "";
 static int startFrame = 0;
 static int frames =30;
 static int threads = 0;
-static int metric = 0;
-static string metric_name = "";
+static int metric = PSNR_METRIC;
+static string metric_name = "PSNR";
 static std::vector<int> *roiY=NULL;
 static std::vector<int>* roiUV = NULL;
 
@@ -445,8 +445,8 @@ void compute_psnr_file(string filename, string ref_filename, int W, int H, int s
     int pixel_cnt_uv = (W * H) / 4;
     int batch_size = 1;
 
-    if (metric == WSPSNR_ERP_METRIC)
-        std::cout << "filename,fn,PSNR-Y(dB),PSNR-U(dB),PSNR-V(dB),Time(Sec)" << std::endl;
+    
+    std::cout << "filename,fn,PSNR-Y(dB),PSNR-U(dB),PSNR-V(dB),Time(Sec)" << std::endl;
 #if MODE == USE_CUDA
 
     //batch_size = 1;
@@ -866,7 +866,7 @@ int main(int argc, char* argv[])
             cout << "-sf    | " << "Start frame to computed the quality metric" << endl;
             cout << "-nf    | " << "Number of frames to compute quality metric" << endl;
             cout << "-qm    | " << "Quality metric type (0:PSNR, 1:WSPSNR for ERP fromat)" << endl;
-            cout << "-roi   | " << "Region of intereset to compute quality metric [top, bottom, left, right]" << endl;
+            cout << "-roi   | " << "Region of intereset to compute quality metric [Top,Bottom,Left,Right]" << endl;
             #if (MODE == USE_OPENMP || MODE == USE_SIMD)
                         cout << "-nt    | " << "Number of threads for computation (number of physical cores IF <=0 || >= number of physical cores)" << endl;
             #endif
@@ -987,36 +987,39 @@ int main(int argc, char* argv[])
         ref_inDir += "/";
     }
 #endif
-    
+    std::cout << "=============================================" << std::endl;
+    #if MODE==USE_SIMD
+        std::cout << "USE_SIMD" << std::endl;
+    #elif MODE==USE_OPENMP
+        std::cout << "USE_OPENMP" << std::endl;
+    #elif MODE==USE_NORMAL_LOOP
+        std::cout << "NORMAL_LOOP" << std::endl;
+    #elif MODE==USE_OPENCV
+        std::cout << "USE_OPENCV" << std::endl;
+    #elif MODE==USE_CUDA
+        std::cout << "USE_CUDA" << std::endl;
+    #endif
+    std::cout << "COMPUTE DTYPE SIZE=" << sizeof(COMPUTE_DTYPE) << std::endl;
+    std::cout << "=============================================" << std::endl;
     std::cout << "INPUT FILENAME=" << filename << std::endl;
     std::cout << "REF FILENAME=" << ref_filename << std::endl;
     std::cout << "INPUT DIR=" << inDir << std::endl;
     std::cout << "BIT DEPTH=" << bd << std::endl;
-    std::cout << "VIDEO_SIZE=[W, H]=[" << w << "," << h << "]" << std::endl;
+    std::cout << "VIDEO SIZE=[W,H]=[" << w << "," << h << "]" << std::endl;
     std::cout << "NUM FRAMES=" << frames << std::endl;
     std::cout << "START FRAME=" << startFrame << std::endl;
-    std::cout << "METRIC_NAME=" << metric_name<< std::endl;
-    cout << "NUM THREADS" << threads << endl;
+    std::cout << "METRIC=" << metric_name<< std::endl;
+    cout << "NUM THREADS=" << threads << endl;
 	if (roiY != NULL)
 	{
-        std::cout << "ROI=[T, B, L, R]=[" << (*roiY)[0] << "," << (*roiY)[1] << "," << (*roiY)[2] << "," << (*roiY)[3] << "]" << std::endl;
+        std::cout << "ROI=[T,B,L,R]=[" << (*roiY)[0] << "," << (*roiY)[1] << "," << (*roiY)[2] << "," << (*roiY)[3] << "]" << std::endl;
 	}
-    std::cout << "COMPUTE_DTYPE_SIZE=" << sizeof(COMPUTE_DTYPE) << std::endl;
+    std::cout << "============================================="<< std::endl;
 
         
     auto st = std::chrono::high_resolution_clock::now();
 
-#if MODE==USE_SIMD
-    std::cout << "USE_SIMD" << std::endl;
-#elif MODE==USE_OPENMP
-    std::cout << "USE_OPENMP" << std::endl;
-#elif MODE==USE_NORMAL_LOOP
-    std::cout << "NORMAL_LOOP" << std::endl;
-#elif MODE==USE_OPENCV
-    std::cout << "USE_OPENCV" << std::endl;
-#elif MODE==USE_CUDA
-    std::cout << "USE_CUDA" << std::endl;
-#endif
+
 
 #if MODE==USE_SIMD || MODE==USE_OPENMP
     
