@@ -1,11 +1,10 @@
 # YUVQATool
 
-**YUVQATool** is a lightweight and high-performance quality assessment tool for YUV video sequences, specifically designed for 360° videos in **equirectangular projection (ERP)** format.  
-It is implemented in **C++** and supports acceleration via **SIMD (AVX2)** and **CUDA**.
+**YUVQATool** is a lightweight and high-performance quality assessment tool for YUV videos. It is purly implemented in **C++** and supports acceleration via **SIMD (AVX2)** and **CUDA**.
 
 ## Features
 
-- ⚙️ Written entirely in C++ for speed and portability
+- ⚙️ Written entirely in C++
 - 🚀 SIMD (AVX2) acceleration using 
 - 🚀 OPENMP parallel computation
 - ⚡ GPU acceleration with CUDA
