@@ -31,9 +31,9 @@ Change the value of **#define MODE** macro in the **config.h** to use OPENMP, SI
 ```
 
 ### Window
-The project is orginally wrritten in Visual Stuio 2022. The solution file of the project exists in the git.
+The project is originally written in Visual Studio 2022. The solution file of the project exists in the git.
 ### Linux
-The code can be also wriiten in Linux using GCC complier. The build command will be added soon... 
+The code can also be written in Linux using the GCC compiler. The build command will be added soon... 
 
 ### Command-line Options
 
