@@ -131,9 +131,9 @@ void compute_wspsnr_file(string filename, string ref_filename, int W, int H, int
 
             auto st = std::chrono::high_resolution_clock::now();
             // Calculate WPSNR
-            wspsnr_frame[0] = wspsnr(ref_Y_img, Y_img, W, H, bd, wspsnr_weightsY);
-            wspsnr_frame[1] = wspsnr(ref_U_img, U_img, W / 2, H / 2, bd, wspsnr_weightsUV);
-            wspsnr_frame[2] = wspsnr(ref_V_img, V_img, W / 2, H / 2, bd, wspsnr_weightsUV);
+            wspsnr_frame[0] = wspsnr(ref_Y_img, Y_img, W, H, bd, wspsnr_weightsY,roiY);
+            wspsnr_frame[1] = wspsnr(ref_U_img, U_img, W / 2, H / 2, bd, wspsnr_weightsUV,roiUV);
+            wspsnr_frame[2] = wspsnr(ref_V_img, V_img, W / 2, H / 2, bd, wspsnr_weightsUV, roiUV);
             auto et = std::chrono::high_resolution_clock::now();
             duration = chrono::duration_cast<chrono::milliseconds>(et - st).count() / 1000.0;
         }
@@ -144,9 +144,9 @@ void compute_wspsnr_file(string filename, string ref_filename, int W, int H, int
 
             auto st = std::chrono::high_resolution_clock::now();
             // Calculate WPSNR
-            wspsnr_frame[0] = wspsnr(ref_Y_img, Y_img, W, H, bd, wspsnr_weightsY);
-            wspsnr_frame[1] = wspsnr(ref_U_img, U_img, W / 2, H / 2, bd, wspsnr_weightsUV);
-            wspsnr_frame[2] = wspsnr(ref_V_img, V_img, W / 2, H / 2, bd, wspsnr_weightsUV);
+            wspsnr_frame[0] = wspsnr(ref_Y_img, Y_img, W, H, bd, wspsnr_weightsY, roiY);
+            wspsnr_frame[1] = wspsnr(ref_U_img, U_img, W / 2, H / 2, bd, wspsnr_weightsUV, roiUV);
+            wspsnr_frame[2] = wspsnr(ref_V_img, V_img, W / 2, H / 2, bd, wspsnr_weightsUV, roiUV);
             auto et = std::chrono::high_resolution_clock::now();
             duration = chrono::duration_cast<chrono::milliseconds>(et - st).count() / 1000.0;
 
@@ -822,8 +822,6 @@ void compute_psnr_file(string filename, string ref_filename, int W, int H, int s
     ref_yuv_f.close();
 
 }
-
-
 
 #if MODE == USE_SIMD || MODE == USE_OPENMP
 

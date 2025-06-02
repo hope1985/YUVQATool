@@ -11,7 +11,7 @@
 
 using namespace std;
 
-
+#include <iostream>
 template<class T>
 static double wspsnr_slow(const vector<T> refPic, const vector<T> recPic, int W, int H, int bitDepth, const vector<double> weights) {
     // Convert to double precision
@@ -115,7 +115,8 @@ static double wspsnr(const T* refPic, const T* recPic, int W, int H, int bitDept
 #if MODE==USE_OPENMP
         sse_sum += sse_sum_row[hi] * weights[hi];
 #endif
-        w_sum += (weights[hi] * W);
+
+        w_sum += (weights[hi] * roiW);
     }
 
 

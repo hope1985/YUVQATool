@@ -11,7 +11,7 @@
 #define USE_OPENMP 3
 #define USE_NORMAL_LOOP 4
 
-#define MODE USE_NORMAL_LOOP
+#define MODE USE_OPENMP
 
 
 #define DTYPE_DOUBLE 10
