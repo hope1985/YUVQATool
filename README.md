@@ -18,10 +18,10 @@
 ## Build Instructions
 Change the value of **#define MODE** macro in the **config.h** to use OPENMP, SIMD, or CUDA:
 ```sh
-- #define MODE  USE_NORMAL_LOOP   
-- #define MODE  USE_OPENMP     
-- #define MODE  USE_SIMD
-- #define MODE  USE_CUDA
+#define MODE  USE_NORMAL_LOOP   
+#define MODE  USE_OPENMP     
+#define MODE  USE_SIMD
+#define MODE  USE_CUDA
 ```
 
 ### Windows
