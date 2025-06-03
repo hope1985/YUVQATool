@@ -4,8 +4,8 @@
 
 ## Features
 - 📊 Supports **region of interest (ROI)** or **full frame** computation of:
-  - **PSNR** (Peak Signal-to-Noise Ratio)
-  - **WS-PSNR** (Weighted-to-Spherically-uniform PSNR) for equirectangular projection (ERP) format
+  - **PSNR** 
+  - **WS-PSNR** for equirectangular projection (ERP) format
 
 ## Supported Formats
 - Raw YUV 4:2:0 video
