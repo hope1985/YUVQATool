@@ -24,7 +24,7 @@ Change the value of **#define MODE** macro in the **config.h** to use OPENMP, SI
 - #define MODE  USE_CUDA
 ```
 
-### Window
+### Windows
 The project is originally written in Visual Studio 2022. The solution file for the Visual Studio project exists in Git.
 ### Linux
 The code can also be executed in Linux using the GCC compiler. The build command will be added soon... 
