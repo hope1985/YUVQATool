@@ -13,7 +13,7 @@
 
 ## Dependencies
 - C++17 compatible compiler
-- [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit) (CUDA ≥ 12.8, arch ≥ compute_61, code ≥ sm_61)
+- Optional: [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit) (CUDA ≥ 12.8, arch ≥ compute_61, code ≥ sm_61)
 
 ## Build Instructions
 Change the value of **#define MODE** macro in the **config.h** to use OPENMP, SIMD, or CUDA:
