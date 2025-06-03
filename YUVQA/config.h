@@ -6,7 +6,6 @@
 #define WSPSNR_ERP_METRIC 1
 
 #define USE_SIMD 0
-#define USE_OPENCV 1
 #define USE_CUDA 2
 #define USE_OPENMP 3
 #define USE_NORMAL_LOOP 4

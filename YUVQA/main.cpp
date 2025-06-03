@@ -6,23 +6,19 @@
 #include <vector>
 #include <stdio.h>
 #include "commons.h"
-#include "normal_loop.h"
 #include "yuv_file_handler.h"
 #include <filesystem>
+
 namespace fs = std::filesystem;
-
-
 using namespace std;
 
-#if MODE== USE_OPENCV   
-    #include "wspsnr_opencv.h"
-    using namespace cv;
+#if (MODE== USE_NORMAL_LOOP) || (MODE== USE_OPENMP)
+    #include "normal_loop.h"
 #elif MODE== USE_SIMD
     #include "simd.h"
 #elif MODE== USE_CUDA
     #include "cuda.cuh"
 #endif
-
 
 static string inDir = "";
 static string ref_inDir = "";
@@ -105,22 +101,9 @@ void compute_wspsnr_file(string filename, string ref_filename, int W, int H, int
     {
 
 
-#if MODE== USE_OPENCV  
-        double wspsnr_frame[3] = { 0 };
-        cv::Mat ref_Y_img, ref_U_img, ref_V_img;
-        read_YUV420_frame(ref_yuv_f, W, H, bd, ref_Y_img, ref_U_img, ref_V_img);
 
-        cv::Mat Y_img, U_img, V_img;
-        read_YUV420_frame(yuv_f, W, H, bd, Y_img, U_img, V_img);
 
-        auto st = std::chrono::high_resolution_clock::now();
-        wspsnr_frame[0] = wpsnr_opencv(ref_Y_img, Y_img, W, H, bd, wspsnr_weightsY);
-        wspsnr_frame[1] = wpsnr_opencv(ref_U_img, U_img, W/2, H/2, bd, wspsnr_weightsUV);
-        wspsnr_frame[2] = wpsnr_opencv(ref_V_img, V_img, W/2, H/2, bd, wspsnr_weightsUV);
-        auto et = std::chrono::high_resolution_clock::now();
-        double duration = chrono::duration_cast<chrono::milliseconds>(et - st).count() / 1000.0;
-
-#elif (MODE== USE_NORMAL_LOOP) || (MODE== USE_OPENMP)
+#if (MODE== USE_NORMAL_LOOP) || (MODE== USE_OPENMP)
 
         double wspsnr_frame[3] = { 0 };
         double duration = 0;
@@ -489,22 +472,8 @@ void compute_psnr_file(string filename, string ref_filename, int W, int H, int s
     for (int k = startFrame; k < frames; k = k + batch_size)
     {
 
-#if MODE== USE_OPENCV  
-        double psnr_frame[3] = { 0 };
-        cv::Mat ref_Y_img, ref_U_img, ref_V_img;
-        read_YUV420_frame(ref_yuv_f, W, H, bd, ref_Y_img, ref_U_img, ref_V_img);
 
-        cv::Mat Y_img, U_img, V_img;
-        read_YUV420_frame(yuv_f, W, H, bd, Y_img, U_img, V_img);
-
-        auto st = std::chrono::high_resolution_clock::now();
-        psnr_frame[0] = wpsnr_opencv(ref_Y_img, Y_img, W, H, bd, wspsnr_weightsY);
-        psnr_frame[1] = wpsnr_opencv(ref_U_img, U_img, W / 2, H / 2, bd, wspsnr_weightsUV);
-        psnr_frame[2] = wpsnr_opencv(ref_V_img, V_img, W / 2, H / 2, bd, wspsnr_weightsUV);
-        auto et = std::chrono::high_resolution_clock::now();
-        double duration = chrono::duration_cast<chrono::milliseconds>(et - st).count() / 1000.0;
-
-#elif (MODE== USE_NORMAL_LOOP) || (MODE== USE_OPENMP)
+#if (MODE== USE_NORMAL_LOOP) || (MODE== USE_OPENMP)
 
         double psnr_frame[3] = { 0 };
         double duration = 0;
@@ -905,8 +874,6 @@ int main(int argc, char* argv[])
         std::cout << "USE_OPENMP" << std::endl;
     #elif MODE==USE_NORMAL_LOOP
         std::cout << "NORMAL_LOOP" << std::endl;
-    #elif MODE==USE_OPENCV
-        std::cout << "USE_OPENCV" << std::endl;
     #elif MODE==USE_CUDA
         std::cout << "USE_CUDA" << std::endl;
     #endif
