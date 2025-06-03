@@ -38,7 +38,7 @@ The code can also be executed in Linux using the GCC compiler. The build command
 | `-w`    | Width of the YUV file                                                                                   |
 | `-h`    | Height of the YUV file                                                                                  |
 | `-bd`   | Bit-depth of the YUV file (8 or 10)                                                                     |
-| `-sf`   | Start frame index to begin computing the quality metric                                                 |
+| `-sf`   | Start frame index to compute the quality metric                                                 |
 | `-nf`   | Number of frames to compute quality metric                                               |
 | `-qm`   | Quality metric type ('0' = PSNR, '1' = WSPSNR for ERP format)                                           |
 | `-roi`  | Region of interest for quality computation as `[Top, Bottom, Left, Right]`                              |
