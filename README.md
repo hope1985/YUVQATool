@@ -38,8 +38,8 @@ The code can also be executed in Linux using the GCC compiler. The build command
 | `-w`    | Width of the YUV file                                                                                   |
 | `-h`    | Height of the YUV file                                                                                  |
 | `-bd`   | Bit-depth of the YUV file (8 or 10)                                                                     |
-| `-sf`   | Start frame index to compute the quality metric                                                 |
-| `-nf`   | Number of frames to compute quality metric                                               |
+| `-sf`   | Start frame index to compute quality                                                 |
+| `-nf`   | Number of frames to compute quality                                               |
 | `-qm`   | Quality metric type ('0' = PSNR, '1' = WSPSNR for ERP format)                                           |
 | `-roi`  | Region of interest for quality computation as `[Top, Bottom, Left, Right]`                              |
 | `-nt`   | Number of threads used for OPENMP/SIMD modes (set '<= 0' or '>= core count' to use all physical cores)     |
