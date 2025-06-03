@@ -9,11 +9,11 @@
 
 ## Supported Formats
 - Raw YUV 4:2:0 video
-- Bit-depth: 8-bit (support for 10-bit can be added upon request)
+- Bit-depth: 8-bit/10-bit
 
 ## Dependencies
 - C++17 compatible compiler
-- [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit) (CUDA ≥ 12.8, compute_61, sm_61)
+- [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit) (CUDA ≥ 12.8, arch ≥ compute_61, code ≥ sm_61)
 
 ## Build Instructions
 Change the value of **#define MODE** macro in the **config.h** to use OPENMP, SIMD, or CUDA:
@@ -25,7 +25,7 @@ Change the value of **#define MODE** macro in the **config.h** to use OPENMP, SI
 ```
 
 ### Window
-The project is originally written in Visual Studio 2022. The solution file of the project exists in the git.
+The project is originally written in Visual Studio 2022. The solution file for the Visual Studio project exists in Git.
 ### Linux
 The code can also be written in Linux using the GCC compiler. The build command will be added soon... 
 
