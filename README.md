@@ -42,7 +42,7 @@ The code can also be executed in Linux using the GCC compiler. The build command
 | `-nf`   | Number of frames to compute quality metric                                               |
 | `-qm`   | Quality metric type ('0' = PSNR, '1' = WSPSNR for ERP format)                                           |
 | `-roi`  | Region of interest for quality computation as `[Top, Bottom, Left, Right]`                              |
-| `-nt`   | Number of threads (used in USE_OPENMP/USE_SIMD modes); set '<= 0' or '>= core count' to use all physical cores)     |
+| `-nt`   | Number of threads (used for OPENMP/SIMD modes); set '<= 0' or '>= core count' to use all physical cores)     |
 
 
 ### Usage
