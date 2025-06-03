@@ -31,7 +31,7 @@ The code can also be executed in Linux using the GCC compiler. The build command
 
 ### Command-line Options
 
-| Option  | Description/Options                                                                                     |
+| Option  | Description                                                                                     |
 |---------|---------------------------------------------------------------------------------------------------------|
 | `-i`    | Filepath of the input YUV file                                                                          |
 | `-r`    | Filepath of the reference YUV file                                                                      |
