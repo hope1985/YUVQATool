@@ -49,4 +49,3 @@ static  double get_sum_weights(vector<double> weights, int W,int H)
     return sum;
 }
 
-

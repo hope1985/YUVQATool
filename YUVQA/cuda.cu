@@ -183,7 +183,57 @@ __global__ void computeWSPSNRShared(
     
 }
 
-cudaError_t run_process_cuda_atomic(const int* ref, const int* rec, const double* weights, double* wspsnr_frame, const double w_sum, const  int w, int h, int bitDepth, int nf = 1)
+
+__global__ void computePSNRShared(
+    const int* ref,
+    const int* dist,
+    double* partial_sums,   // [NUM_FRAMES][num_blocks]
+    int width,
+    int height
+) {
+    __shared__ double smem[NUM_THREADS * NUM_THREADS];  // assuming blockDim.x * blockDim.y <= 256
+
+    int tx = threadIdx.x;
+    int ty = threadIdx.y;
+    int tid = ty * blockDim.x + tx;
+
+    int x = tx + blockIdx.x * blockDim.x;
+    int y = ty + blockIdx.y * blockDim.y;
+    int f = blockIdx.z;
+
+    int frame_stride = width * height;
+
+        double local_sum = 0.0f;
+        //for (int t = 0; t < 10000; t++)
+        {
+        if (x < width && y < height) {
+            int idx = f * frame_stride + y * width + x;
+            int diff = ref[idx] - dist[idx];
+            int sse = diff * diff;
+            local_sum = sse;
+        }
+    }
+        smem[tid] = local_sum;
+        __syncthreads();
+
+        // Block-wide reduction
+        for (int s = blockDim.x * blockDim.y / 2; s > 0; s >>= 1) {
+            if (tid < s)
+                smem[tid] += smem[tid + s];
+            __syncthreads();
+        }
+
+
+        // Only thread 0 writes the result
+        if (tid == 0) {
+            int block_idx = blockIdx.y * gridDim.x + blockIdx.x;
+            partial_sums[f * gridDim.x * gridDim.y + block_idx] = smem[0];
+        }
+    
+}
+
+
+cudaError_t wspsnr_process_cuda_atomic(const int* ref, const int* rec, const double* weights, double* wspsnr_frame, const double w_sum, const  int w, int h, int bitDepth, int nf = 1)
 {
 
     int* dev_ref = 0;
@@ -280,7 +330,7 @@ Error:
 }
 
 
-cudaError_t run_process_cuda_shared_mem(const int* ref, const int* rec, const double* weights, double* wspsnr_frame, const double w_sum, const  int w, int h, int bitDepth, int nf = 1)
+cudaError_t wspsnr_process_cuda_shared_mem(const int* ref, const int* rec, const double* weights, double* wspsnr_frame, const double w_sum, const  int w, int h, int bitDepth, int nf = 1)
 {
 
     int* dev_ref = 0;
@@ -410,21 +460,24 @@ void intit_device_buffer(int** dev_ref, int** dev_rec, double** dev_weights , do
        
     }
 
-    cudaStatus = cudaMalloc((void**)&(*dev_weights), h * sizeof(double));
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaMalloc failed!");
-        
-    }
+    if (dev_weights != nullptr && weights != nullptr)
+    {
+        cudaStatus = cudaMalloc((void**)&(*dev_weights), h * sizeof(double));
+        if (cudaStatus != cudaSuccess) {
+            fprintf(stderr, "cudaMalloc failed!");
 
+        }
 
-    cudaStatus = cudaMemcpy((*dev_weights), weights, h * sizeof(double), cudaMemcpyHostToDevice);
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaMemcpy failed!");
-      
+        cudaStatus = cudaMemcpy((*dev_weights), weights, h * sizeof(double), cudaMemcpyHostToDevice);
+        if (cudaStatus != cudaSuccess) {
+            fprintf(stderr, "cudaMemcpy failed!");
+
+        }
     }
 }
 
-cudaError_t run_process_cuda_shared_mem(const int* ref, const int* rec, int* dev_ref, int* dev_rec, double* dev_weights, double* dev_partial_sum,const double* weights,  double* wspsnr_frame, const double w_sum, const  int w, int h, int bitDepth, int nf = 1)
+//used
+cudaError_t wspsnr_process_cuda_shared_mem(const int* ref, const int* rec, int* dev_ref, int* dev_rec, double* dev_weights, double* dev_partial_sum,const double* weights,  double* wspsnr_frame, const double w_sum, const  int w, int h, int bitDepth, int nf = 1)
 {
 
     /*int* dev_ref = 0;
@@ -446,30 +499,6 @@ cudaError_t run_process_cuda_shared_mem(const int* ref, const int* rec, int* dev
     
     double* h_partial_sum = new double[partial_sum_num];
 
-    // Allocate GPU buffers for three vectors (two input, one output)    .
-    /*cudaStatus = cudaMalloc((void**)&dev_ref, size * sizeof(int));
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaMalloc failed!");
-        goto Error;
-    }
-
-    cudaStatus = cudaMalloc((void**)&dev_rec, size * sizeof(int));
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaMalloc failed!");
-        goto Error;
-    }
-
-    cudaStatus = cudaMalloc((void**)&dev_partial_sum, partial_sum_num * sizeof(double));
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaMalloc failed!");
-        goto Error;
-    }
-
-    cudaStatus = cudaMalloc((void**)&dev_weights, h * sizeof(double));
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaMalloc failed!");
-        goto Error;
-    }*/
 
    
     // Copy input vectors from host memory to GPU buffers.
@@ -485,12 +514,7 @@ cudaError_t run_process_cuda_shared_mem(const int* ref, const int* rec, int* dev
         goto Error;
     }
 
-    /*
-    cudaStatus = cudaMemcpy(dev_weights, weights, h * sizeof(double), cudaMemcpyHostToDevice);
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaMemcpy failed!");
-        goto Error;
-    }*/
+
     auto st = std::chrono::high_resolution_clock::now();
     computeWSPSNRShared << <gridDim, blockDim >> > (dev_ref, dev_rec, dev_weights, dev_partial_sum, w, h);
 
@@ -505,8 +529,9 @@ cudaError_t run_process_cuda_shared_mem(const int* ref, const int* rec, int* dev
         for (int b = 0; b < num_blocks; ++b) {
             weighted_mse += h_partial_sum[f * num_blocks + b];
 
-            wspsnr_frame[f] = 10 * std::log10((MAX_VALUE * MAX_VALUE * w_sum) / weighted_mse);
+            
         }
+        wspsnr_frame[f] = 10 * std::log10((MAX_VALUE * MAX_VALUE * w_sum) / weighted_mse);
     }
     auto et = std::chrono::high_resolution_clock::now();
     double duration = std::chrono::duration_cast<std::chrono::milliseconds>(et - st).count() / 1000.0;
@@ -523,8 +548,7 @@ Error:
     return cudaStatus;
 }
 
-
-cudaError_t run_process_cuda_shared_mem_2streams(const int* ref, const int* rec, const double* weights, double* wspsnr_frame, const double w_sum, const  int w, int h, int bitDepth, int nf = 1)
+cudaError_t wspsnr_cuda_shared_mem_2streams(const int* ref, const int* rec, const double* weights, double* wspsnr_frame, const double w_sum, const  int w, int h, int bitDepth, int nf = 1)
 {
 
     cudaError_t cudaStatus;
@@ -674,11 +698,8 @@ Error:
     return cudaStatus;
 }
 
-
-
-cudaError_t run_process_cuda(const int* ref, const int* rec, int* dev_ref, int* dev_rec, double* dev_weights, double* sqdiff_weighted, const double* weights, double* wspsnr_frame, const double w_sum, const  int w, int h, int bitDepth, int nf = 1)
+cudaError_t wspsnr_process_cuda(const int* ref, const int* rec, int* dev_ref, int* dev_rec, double* dev_weights, double* sqdiff_weighted, const double* weights, double* wspsnr_frame, const double w_sum, const  int w, int h, int bitDepth, int nf = 1)
 {
-
 
     cudaError_t cudaStatus;
     double MAX_VALUE = (255.0 * (1 << (bitDepth - 8)));
@@ -693,32 +714,6 @@ cudaError_t run_process_cuda(const int* ref, const int* rec, int* dev_ref, int* 
 
     //double* h_partial_sum = new double[partial_sum_num];
 
-    // Allocate GPU buffers for three vectors (two input, one output)    .
-    /*cudaStatus = cudaMalloc((void**)&dev_ref, size * sizeof(int));
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaMalloc failed!");
-        goto Error;
-    }
-
-    cudaStatus = cudaMalloc((void**)&dev_rec, size * sizeof(int));
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaMalloc failed!");
-        goto Error;
-    }
-
-    cudaStatus = cudaMalloc((void**)&dev_partial_sum, partial_sum_num * sizeof(double));
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaMalloc failed!");
-        goto Error;
-    }
-
-    cudaStatus = cudaMalloc((void**)&dev_weights, h * sizeof(double));
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaMalloc failed!");
-        goto Error;
-    }*/
-
-    
     // Copy input vectors from host memory to GPU buffers.
     cudaStatus = cudaMemcpy(dev_ref, ref, size * sizeof(int), cudaMemcpyHostToDevice);
     if (cudaStatus != cudaSuccess) {
@@ -761,21 +756,67 @@ cudaError_t run_process_cuda(const int* ref, const int* rec, int* dev_ref, int* 
     double duration = std::chrono::duration_cast<std::chrono::milliseconds>(et - st).count() / 1000.0;
     std::cout << duration << std::endl;
 
-
 Error:
-    //cudaFree(dev_ref);
-    //cudaFree(dev_rec);
-    //cudaFree(dev_weights);
-    //cudaFree(dev_partial_sum);
-    //free(h_partial_sum);
-
     return cudaStatus;
 }
 
 
 
+//used
+cudaError_t psnr_process_cuda_shared_mem(const int* ref, const int* rec, int* dev_ref, int* dev_rec, double* dev_partial_sum,  double* psnr_frame,  const  int w, int h, int bitDepth, int nf = 1)
+{
 
+    cudaError_t cudaStatus;
+    double MAX_VALUE = (255.0 * (1 << (bitDepth - 8)));
 
+    int size = w * h * nf;
 
+    dim3 blockDim(NUM_THREADS, NUM_THREADS);
+    dim3 gridDim((w + NUM_THREADS - 1) / NUM_THREADS, (h + NUM_THREADS - 1) / NUM_THREADS, nf);
+
+    int num_blocks = gridDim.x * gridDim.y;
+    int partial_sum_num = num_blocks * gridDim.z;   //num_frames * num_blocks
+
+    double* h_partial_sum = new double[partial_sum_num];
+
+    // Copy input vectors from host memory to GPU buffers.
+    cudaStatus = cudaMemcpy(dev_ref, ref, size * sizeof(int), cudaMemcpyHostToDevice);
+    if (cudaStatus != cudaSuccess) {
+        fprintf(stderr, "cudaMemcpy failed!");
+        goto Error;
+    }
+
+    cudaStatus = cudaMemcpy(dev_rec, rec, size * sizeof(int), cudaMemcpyHostToDevice);
+    if (cudaStatus != cudaSuccess) {
+        fprintf(stderr, "cudaMemcpy failed!");
+        goto Error;
+    }
+
+    auto st = std::chrono::high_resolution_clock::now();
+    computePSNRShared << <gridDim, blockDim >> > (dev_ref, dev_rec, dev_partial_sum, w, h);
+
+    cudaStatus = cudaMemcpy(h_partial_sum, dev_partial_sum, partial_sum_num * sizeof(double), cudaMemcpyDeviceToHost);
+    if (cudaStatus != cudaSuccess) {
+        fprintf(stderr, "cudaMemcpy failed!");
+        goto Error;
+    }
+
+    for (int f = 0; f < nf; ++f) {
+        double sse = 0.0f;
+        for (int b = 0; b < num_blocks; ++b) {
+            sse += h_partial_sum[f * num_blocks + b];
+        }
+        sse = sse / (w * h);
+        psnr_frame[f] = 10 * std::log10((MAX_VALUE * MAX_VALUE) / sse);
+    }
+    auto et = std::chrono::high_resolution_clock::now();
+    double duration = std::chrono::duration_cast<std::chrono::milliseconds>(et - st).count() / 1000.0;
+    std::cout << duration << std::endl;
+
+Error:
+
+    free(h_partial_sum);
+    return cudaStatus;
+}
 
 #endif

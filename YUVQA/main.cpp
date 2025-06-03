@@ -267,9 +267,9 @@ void compute_wspsnr_file(string filename, string ref_filename, int W, int H, int
 
 
             //Works onyly with batch_size=2 and even number of frames
-            //run_process_cuda_shared_mem_2streams(refPicY.data(), recPicY.data(), wspsnr_weightsY.data(), wspsnr_framesY, w_sumY, W, H, bd, batch_size);
-            //run_process_cuda_shared_mem_2streams(refPicU.data(), recPicU.data(), wspsnr_weightsUV.data(), wspsnr_framesU, w_sumUV, W / 2, H / 2, bd, batch_size);
-            //run_process_cuda_shared_mem_2streams(refPicV.data(), recPicV.data(), wspsnr_weightsUV.data(), wspsnr_framesV, w_sumUV, W / 2, H / 2, bd, batch_size);
+            //wspsnr_process_cuda_shared_mem_2streams(refPicY.data(), recPicY.data(), wspsnr_weightsY.data(), wspsnr_framesY, w_sumY, W, H, bd, batch_size);
+            //wspsnr_process_cuda_shared_mem_2streams(refPicU.data(), recPicU.data(), wspsnr_weightsUV.data(), wspsnr_framesU, w_sumUV, W / 2, H / 2, bd, batch_size);
+            //wspsnr_process_cuda_shared_mem_2streams(refPicV.data(), recPicV.data(), wspsnr_weightsUV.data(), wspsnr_framesV, w_sumUV, W / 2, H / 2, bd, batch_size);
 
    
             // Add vectors in parallel.
@@ -281,15 +281,15 @@ void compute_wspsnr_file(string filename, string ref_filename, int W, int H, int
             }*/
 
 
-            run_process_cuda_shared_mem(refPicY.data(), recPicY.data(),dev_refY,dev_recY,dev_weightsY,dev_partial_sumY, wspsnr_weightsY.data(), wspsnr_framesY, w_sumY, W, H, bd, batch_size);
-            run_process_cuda_shared_mem(refPicU.data(), recPicU.data(), dev_refU, dev_recU, dev_weightsU, dev_partial_sumU, wspsnr_weightsUV.data(), wspsnr_framesU, w_sumUV, W / 2, H / 2, bd, batch_size);
-            run_process_cuda_shared_mem(refPicV.data(), recPicV.data(), dev_refV, dev_recV, dev_weightsV, dev_partial_sumV, wspsnr_weightsUV.data(), wspsnr_framesV, w_sumUV, W / 2, H / 2, bd, batch_size);
+            wspsnr_process_cuda_shared_mem(refPicY.data(), recPicY.data(),dev_refY,dev_recY,dev_weightsY,dev_partial_sumY, wspsnr_weightsY.data(), wspsnr_framesY, w_sumY, W, H, bd, batch_size);
+            wspsnr_process_cuda_shared_mem(refPicU.data(), recPicU.data(), dev_refU, dev_recU, dev_weightsU, dev_partial_sumU, wspsnr_weightsUV.data(), wspsnr_framesU, w_sumUV, W / 2, H / 2, bd, batch_size);
+            wspsnr_process_cuda_shared_mem(refPicV.data(), recPicV.data(), dev_refV, dev_recV, dev_weightsV, dev_partial_sumV, wspsnr_weightsUV.data(), wspsnr_framesV, w_sumUV, W / 2, H / 2, bd, batch_size);
 
 
             /*
-            run_process_cuda(refPicY.data(), recPicY.data(), wspsnr_weightsY.data(), wspsnr_framesY, w_sumY, W, H, bd, batch_size);
-            run_process_cuda(refPicU.data(), recPicU.data(), wspsnr_weightsUV.data(), wspsnr_framesU, w_sumUV, W / 2, H / 2, bd, batch_size);
-            run_process_cuda(refPicV.data(), recPicV.data(), wspsnr_weightsUV.data(), wspsnr_framesV, w_sumUV, W / 2, H / 2, bd, batch_size);
+            wspsnr_process_cuda(refPicY.data(), recPicY.data(), wspsnr_weightsY.data(), wspsnr_framesY, w_sumY, W, H, bd, batch_size);
+            wspsnr_process_cuda(refPicU.data(), recPicU.data(), wspsnr_weightsUV.data(), wspsnr_framesU, w_sumUV, W / 2, H / 2, bd, batch_size);
+            wspsnr_process_cuda(refPicV.data(), recPicV.data(), wspsnr_weightsUV.data(), wspsnr_framesV, w_sumUV, W / 2, H / 2, bd, batch_size);
             */
 
             auto et = std::chrono::high_resolution_clock::now();
@@ -336,13 +336,13 @@ void compute_wspsnr_file(string filename, string ref_filename, int W, int H, int
             vector<int> recPicV = recVbatch;
 
             //Works onyly with batch_size=2 and even number of framees
-            //run_process_cuda_shared_mem_2streams(refPicY.data(), recPicY.data(), wspsnr_weightsY.data(), wspsnr_framesY, w_sumY, W, H, bd, batch_size);
-            //run_process_cuda_shared_mem_2streams(refPicU.data(), recPicU.data(), wspsnr_weightsUV.data(), wspsnr_framesU, w_sumUV, W / 2, H / 2, bd, batch_size);
-            //run_process_cuda_shared_mem_2streams(refPicV.data(), recPicV.data(), wspsnr_weightsUV.data(), wspsnr_framesV, w_sumUV, W / 2, H / 2, bd, batch_size);
+            //wspsnr_process_cuda_shared_mem_2streams(refPicY.data(), recPicY.data(), wspsnr_weightsY.data(), wspsnr_framesY, w_sumY, W, H, bd, batch_size);
+            //wspsnr_process_cuda_shared_mem_2streams(refPicU.data(), recPicU.data(), wspsnr_weightsUV.data(), wspsnr_framesU, w_sumUV, W / 2, H / 2, bd, batch_size);
+            //wspsnr_process_cuda_shared_mem_2streams(refPicV.data(), recPicV.data(), wspsnr_weightsUV.data(), wspsnr_framesV, w_sumUV, W / 2, H / 2, bd, batch_size);
             
-            run_process_cuda_shared_mem(refPicY.data(), recPicY.data(), dev_refY, dev_recY, dev_weightsY, dev_partial_sumY, wspsnr_weightsY.data(), wspsnr_framesY, w_sumY, W, H, bd, batch_size);
-            run_process_cuda_shared_mem(refPicU.data(), recPicU.data(), dev_refU, dev_recU, dev_weightsU, dev_partial_sumU, wspsnr_weightsUV.data(), wspsnr_framesU, w_sumUV, W / 2, H / 2, bd, batch_size);
-            run_process_cuda_shared_mem(refPicV.data(), recPicV.data(), dev_refV, dev_recV, dev_weightsV, dev_partial_sumV, wspsnr_weightsUV.data(), wspsnr_framesV, w_sumUV, W / 2, H / 2, bd, batch_size);
+            wspsnr_process_cuda_shared_mem(refPicY.data(), recPicY.data(), dev_refY, dev_recY, dev_weightsY, dev_partial_sumY, wspsnr_weightsY.data(), wspsnr_framesY, w_sumY, W, H, bd, batch_size);
+            wspsnr_process_cuda_shared_mem(refPicU.data(), recPicU.data(), dev_refU, dev_recU, dev_weightsU, dev_partial_sumU, wspsnr_weightsUV.data(), wspsnr_framesU, w_sumUV, W / 2, H / 2, bd, batch_size);
+            wspsnr_process_cuda_shared_mem(refPicV.data(), recPicV.data(), dev_refV, dev_recV, dev_weightsV, dev_partial_sumV, wspsnr_weightsUV.data(), wspsnr_framesV, w_sumUV, W / 2, H / 2, bd, batch_size);
 
 
             auto et = std::chrono::high_resolution_clock::now();
@@ -445,30 +445,22 @@ void compute_psnr_file(string filename, string ref_filename, int W, int H, int s
     int pixel_cnt_uv = (W * H) / 4;
     int batch_size = 1;
 
-    
     std::cout << "filename,fn,PSNR-Y(dB),PSNR-U(dB),PSNR-V(dB),Time(Sec)" << std::endl;
 #if MODE == USE_CUDA
 
-    //batch_size = 1;
-    auto w_sumY = get_sum_weights(wspsnr_weightsY, W, H);
-    auto w_sumUV = get_sum_weights(wspsnr_weightsUV, W / 2, H / 2);
-
     int* dev_refY = 0;
     int* dev_recY = 0;
-    double* dev_weightsY = 0;
     double* dev_partial_sumY = 0;
-    intit_device_buffer(&dev_refY, &dev_recY, &dev_weightsY, &dev_partial_sumY, W, H, wspsnr_weightsY.data(), batch_size);
+    intit_device_buffer(&dev_refY, &dev_recY, NULL, &dev_partial_sumY, W, H, NULL, batch_size);
     int* dev_refU = 0;
     int* dev_recU = 0;
-    double* dev_weightsU = 0;
     double* dev_partial_sumU = 0;
-    intit_device_buffer(&dev_refU, &dev_recU, &dev_weightsU, &dev_partial_sumU, W / 2, H / 2, wspsnr_weightsUV.data(), batch_size);
+    intit_device_buffer(&dev_refU, &dev_recU, NULL, &dev_partial_sumU, W / 2, H / 2, NULL, batch_size);
 
     int* dev_refV = 0;
     int* dev_recV = 0;
-    double* dev_weightsV = 0;
     double* dev_partial_sumV = 0;
-    intit_device_buffer(&dev_refV, &dev_recV, &dev_weightsV, &dev_partial_sumV, W / 2, H / 2, wspsnr_weightsUV.data(), batch_size);
+    intit_device_buffer(&dev_refV, &dev_recV, NULL, &dev_partial_sumV, W / 2, H / 2, NULL, batch_size);
 
     cudaError_t cudaStatus;
 
@@ -496,7 +488,6 @@ void compute_psnr_file(string filename, string ref_filename, int W, int H, int s
 
     for (int k = startFrame; k < frames; k = k + batch_size)
     {
-
 
 #if MODE== USE_OPENCV  
         double psnr_frame[3] = { 0 };
@@ -551,13 +542,6 @@ void compute_psnr_file(string filename, string ref_filename, int W, int H, int s
         double duration = 0;
         if (bd == 8)
         {
-
-            //vector<unsigned char> ref_Y_img, ref_U_img, ref_V_img;
-            //std::tie(ref_Y_img, ref_U_img, ref_V_img) = read_YUV420_frame<unsigned char, unsigned char>(ref_yuv_f, W, H, bd);
-
-            //vector<unsigned char> Y_img, U_img, V_img;
-            //std::tie(Y_img, U_img, V_img) = read_YUV420_frame<unsigned char, unsigned char>(yuv_f, W, H, bd);
-
             read_YUV420_frame<unsigned char, COMPUTE_DTYPE>(ref_yuv_f, ref_Y_img, ref_U_img, ref_V_img, W, H, bd);
             read_YUV420_frame<unsigned char, COMPUTE_DTYPE>(yuv_f, Y_img, U_img, V_img, W, H, bd);
 
@@ -568,29 +552,18 @@ void compute_psnr_file(string filename, string ref_filename, int W, int H, int s
             psnr_frame[2] = psnr_openmp_simd(ref_V_img, V_img, W / 2, H / 2, bd, roiUV);
             auto et = std::chrono::high_resolution_clock::now();
             duration = chrono::duration_cast<chrono::milliseconds>(et - st).count() / 1000.0;
-
-
         }
         else
         {
 
-            //vector<unsigned short> ref_Y_img, ref_U_img, ref_V_img;
-            //std::tie(ref_Y_img, ref_U_img, ref_V_img) = read_YUV420_frame<unsigned short, unsigned short>(ref_yuv_f, W, H, bd);
-
-            //vector<unsigned short> Y_img, U_img, V_img;
-            //std::tie(Y_img, U_img, V_img) = read_YUV420_frame<unsigned short, unsigned short>(yuv_f, W, H, bd);
-
             read_YUV420_frame<unsigned short, COMPUTE_DTYPE>(ref_yuv_f, ref_Y_img, ref_U_img, ref_V_img, W, H, bd);
             read_YUV420_frame<unsigned short, COMPUTE_DTYPE>(yuv_f, Y_img, U_img, V_img, W, H, bd);
-
 
             auto st = std::chrono::high_resolution_clock::now();
             // Calculate WPSNR
             psnr_frame[0] = psnr_openmp_simd(ref_Y_img, Y_img, W, H, bd,  roiY);
             psnr_frame[1] = psnr_openmp_simd(ref_U_img, U_img, W / 2, H / 2, bd,  roiUV);
             psnr_frame[2] = psnr_openmp_simd(ref_V_img, V_img, W / 2, H / 2, bd,  roiUV);
-
-
 
             auto et = std::chrono::high_resolution_clock::now();
             duration = chrono::duration_cast<chrono::milliseconds>(et - st).count() / 1000.0;
@@ -600,7 +573,6 @@ void compute_psnr_file(string filename, string ref_filename, int W, int H, int s
 
 #elif MODE== USE_CUDA
 
-
         static vector<int> refYbatch(pixel_cnt_y * batch_size);
         static vector<int> recYbatch(pixel_cnt_y * batch_size);
         static vector<int> refUbatch(pixel_cnt_uv * batch_size);
@@ -608,18 +580,13 @@ void compute_psnr_file(string filename, string ref_filename, int W, int H, int s
         static vector<int> refVbatch(pixel_cnt_uv * batch_size);
         static vector<int> recVbatch(pixel_cnt_uv * batch_size);
 
-
         double* psnr_framesY = new double[batch_size];
         double* psnr_framesU = new double[batch_size];
         double* psnr_framesV = new double[batch_size];
 
-
         //Read frames as many as batch_size
         if (bd == 8)
         {
-
-
-
             for (int z = 0; z < batch_size; z++)
             {
                 vector<int> ref_Y_img, ref_U_img, ref_V_img;
@@ -640,17 +607,6 @@ void compute_psnr_file(string filename, string ref_filename, int W, int H, int s
 
             auto st = std::chrono::high_resolution_clock::now();
 
-
-            //Convert unsigned char/unsigned short to double
-            /*vector<double> refPicY(refYbatch.begin(), refYbatch.end());
-            vector<double> recPicY(recYbatch.begin(), recYbatch.end());
-
-            vector<double> refPicU(refUbatch.begin(), refUbatch.end());
-            vector<double> recPicU(recUbatch.begin(), recUbatch.end());
-
-            vector<double> refPicV(refVbatch.begin(), refVbatch.end());
-            vector<double> recPicV(recVbatch.begin(), recVbatch.end());*/
-
             vector<int> refPicY = refYbatch;
             vector<int> recPicY = recYbatch;
             vector<int> refPicU = refUbatch;
@@ -658,32 +614,9 @@ void compute_psnr_file(string filename, string ref_filename, int W, int H, int s
             vector<int> refPicV = refVbatch;
             vector<int> recPicV = recVbatch;
 
-
-            //Works onyly with batch_size=2 and even number of frames
-            //run_process_cuda_shared_mem_2streams(refPicY.data(), recPicY.data(), wspsnr_weightsY.data(), wspsnr_framesY, w_sumY, W, H, bd, batch_size);
-            //run_process_cuda_shared_mem_2streams(refPicU.data(), recPicU.data(), wspsnr_weightsUV.data(), wspsnr_framesU, w_sumUV, W / 2, H / 2, bd, batch_size);
-            //run_process_cuda_shared_mem_2streams(refPicV.data(), recPicV.data(), wspsnr_weightsUV.data(), wspsnr_framesV, w_sumUV, W / 2, H / 2, bd, batch_size);
-
-
-            // Add vectors in parallel.
-            /*cudaError_t cudaStatus = run_process_cuda(refPicY.data(), recPicY.data(), wspsnr_weightsY.data(), wspsnr_framesY, w_sumY, W, H, bd, batch_size);
-
-            if (cudaStatus != cudaSuccess) {
-                fprintf(stderr, "run_process_cuda for Y channel failed!");
-                return 1;
-            }*/
-
-
-            run_process_cuda_shared_mem(refPicY.data(), recPicY.data(), dev_refY, dev_recY, dev_weightsY, dev_partial_sumY, wspsnr_weightsY.data(), wspsnr_framesY, w_sumY, W, H, bd, batch_size);
-            run_process_cuda_shared_mem(refPicU.data(), recPicU.data(), dev_refU, dev_recU, dev_weightsU, dev_partial_sumU, wspsnr_weightsUV.data(), wspsnr_framesU, w_sumUV, W / 2, H / 2, bd, batch_size);
-            run_process_cuda_shared_mem(refPicV.data(), recPicV.data(), dev_refV, dev_recV, dev_weightsV, dev_partial_sumV, wspsnr_weightsUV.data(), wspsnr_framesV, w_sumUV, W / 2, H / 2, bd, batch_size);
-
-
-            /*
-            run_process_cuda(refPicY.data(), recPicY.data(), wspsnr_weightsY.data(), wspsnr_framesY, w_sumY, W, H, bd, batch_size);
-            run_process_cuda(refPicU.data(), recPicU.data(), wspsnr_weightsUV.data(), wspsnr_framesU, w_sumUV, W / 2, H / 2, bd, batch_size);
-            run_process_cuda(refPicV.data(), recPicV.data(), wspsnr_weightsUV.data(), wspsnr_framesV, w_sumUV, W / 2, H / 2, bd, batch_size);
-            */
+            psnr_process_cuda_shared_mem(refPicY.data(), recPicY.data(), dev_refY, dev_recY, dev_partial_sumY, psnr_framesY, W, H, bd, batch_size);
+            psnr_process_cuda_shared_mem(refPicU.data(), recPicU.data(), dev_refU, dev_recU, dev_partial_sumU, psnr_framesU, W / 2, H / 2, bd, batch_size);
+            psnr_process_cuda_shared_mem(refPicV.data(), recPicV.data(), dev_refV, dev_recV, dev_partial_sumV, psnr_framesV, W / 2, H / 2, bd, batch_size);
 
             auto et = std::chrono::high_resolution_clock::now();
             duration = chrono::duration_cast<chrono::milliseconds>(et - st).count() / 1000.0;
@@ -710,17 +643,6 @@ void compute_psnr_file(string filename, string ref_filename, int W, int H, int s
             }
 
             auto st = std::chrono::high_resolution_clock::now();
-
-            //Convert unsigned char/unsigned short to double
-            /*vector<double> refPicY(refYbatch.begin(), refYbatch.end());
-            vector<double> recPicY(recYbatch.begin(), recYbatch.end());
-
-            vector<double> refPicU(refUbatch.begin(), refUbatch.end());
-            vector<double> recPicU(recUbatch.begin(), recUbatch.end());
-
-            vector<double> refPicV(refVbatch.begin(), refVbatch.end());
-            vector<double> recPicV(recVbatch.begin(), recVbatch.end());*/
-
             vector<int> refPicY = refYbatch;
             vector<int> recPicY = recYbatch;
             vector<int> refPicU = refUbatch;
@@ -728,15 +650,9 @@ void compute_psnr_file(string filename, string ref_filename, int W, int H, int s
             vector<int> refPicV = refVbatch;
             vector<int> recPicV = recVbatch;
 
-            //Works onyly with batch_size=2 and even number of framees
-            //run_process_cuda_shared_mem_2streams(refPicY.data(), recPicY.data(), wspsnr_weightsY.data(), wspsnr_framesY, w_sumY, W, H, bd, batch_size);
-            //run_process_cuda_shared_mem_2streams(refPicU.data(), recPicU.data(), wspsnr_weightsUV.data(), wspsnr_framesU, w_sumUV, W / 2, H / 2, bd, batch_size);
-            //run_process_cuda_shared_mem_2streams(refPicV.data(), recPicV.data(), wspsnr_weightsUV.data(), wspsnr_framesV, w_sumUV, W / 2, H / 2, bd, batch_size);
-
-            run_process_cuda_shared_mem(refPicY.data(), recPicY.data(), dev_refY, dev_recY, dev_weightsY, dev_partial_sumY, wspsnr_weightsY.data(), wspsnr_framesY, w_sumY, W, H, bd, batch_size);
-            run_process_cuda_shared_mem(refPicU.data(), recPicU.data(), dev_refU, dev_recU, dev_weightsU, dev_partial_sumU, wspsnr_weightsUV.data(), wspsnr_framesU, w_sumUV, W / 2, H / 2, bd, batch_size);
-            run_process_cuda_shared_mem(refPicV.data(), recPicV.data(), dev_refV, dev_recV, dev_weightsV, dev_partial_sumV, wspsnr_weightsUV.data(), wspsnr_framesV, w_sumUV, W / 2, H / 2, bd, batch_size);
-
+            psnr_process_cuda_shared_mem(refPicY.data(), recPicY.data(), dev_refY, dev_recY,  dev_partial_sumY,  psnr_framesY,  W, H, bd, batch_size);
+            psnr_process_cuda_shared_mem(refPicU.data(), recPicU.data(), dev_refU, dev_recU, dev_partial_sumU,  psnr_framesU,  W / 2, H / 2, bd, batch_size);
+            psnr_process_cuda_shared_mem(refPicV.data(), recPicV.data(), dev_refV, dev_recV,  dev_partial_sumV,  psnr_framesV,  W / 2, H / 2, bd, batch_size);
 
             auto et = std::chrono::high_resolution_clock::now();
             duration = chrono::duration_cast<chrono::milliseconds>(et - st).count() / 1000.0;
@@ -754,7 +670,6 @@ void compute_psnr_file(string filename, string ref_filename, int W, int H, int s
         std::cout << filename << ",  " << std::setw(3) << std::left << k << ",  "
             << std::setw(7) << std::left << std::fixed << std::setprecision(3) << psnr_frame[0] << ",  " << psnr_frame[1] << ",  " << psnr_frame[2] << ",  "
             << std::setw(8) << std::left << std::fixed << std::setprecision(4) << duration << std::endl;
-
 #else
 
         total_time += duration;
@@ -799,15 +714,12 @@ void compute_psnr_file(string filename, string ref_filename, int W, int H, int s
 
     cudaFree(dev_refY);
     cudaFree(dev_recY);
-    cudaFree(dev_weightsY);
     cudaFree(dev_partial_sumY);
     cudaFree(dev_refU);
     cudaFree(dev_recU);
-    cudaFree(dev_weightsU);
     cudaFree(dev_partial_sumU);
     cudaFree(dev_refV);
     cudaFree(dev_recV);
-    cudaFree(dev_weightsV);
     cudaFree(dev_partial_sumV);
 #endif
 
@@ -852,21 +764,22 @@ int main(int argc, char* argv[])
         std::string arg = argv[1];
         if (arg == "-help")
         {
+           
             cout << "Usage: " << "-argument" << " [value]" << endl;
-            cout << "arguments" << endl;
-            cout << "-i     | " << "Filepath of the input yuv file" << endl;
-            cout << "-r     | " << "Filepath of the reference yuv file" << endl;
-            //cout << "-id    | " << "Root directory of the input yuv file" << endl;
-            //cout << "-rd    | " << "Root directory of the reference yuv file" << endl;
-            cout << "-w     | " << "Width of yuv file" << endl;
-            cout << "-h     | " << "Height of yuv file" << endl;
-            cout << "-bd    | " << "Bit-depth (8 or 10)" << endl;
-            cout << "-sf    | " << "Start frame to computed the quality metric" << endl;
+            cout << "Argument     |" << "Description/Options" << endl;
+            cout << "-i     | " << "Filepath of the input YUV file" << endl;
+            cout << "-r     | " << "Filepath of the reference YUV file" << endl;
+            //cout << "-id    | " << "Root directory of the input YUV file" << endl;
+            //cout << "-rd    | " << "Root directory of the reference YUV file" << endl;
+            cout << "-w     | " << "Width of the YUV file" << endl;
+            cout << "-h     | " << "Height of the YUV file" << endl;
+            cout << "-bd    | " << "Bit-depth of the YUV file (8 or 10)" << endl;
+            cout << "-sf    | " << "Start frame index to begin computing the quality metric" << endl;
             cout << "-nf    | " << "Number of frames to compute quality metric" << endl;
-            cout << "-qm    | " << "Quality metric type (0:PSNR, 1:WSPSNR for ERP fromat)" << endl;
-            cout << "-roi   | " << "Region of intereset to compute quality metric [Top,Bottom,Left,Right]" << endl;
+            cout << "-qm    | " << "Quality metric type ('0' = PSNR, '1' = WSPSNR for ERP format)" << endl;
+            cout << "-roi   | " << "Region of interest for quality computation as [Top, Bottom, Left, Right]" << endl;
             #if (MODE == USE_OPENMP || MODE == USE_SIMD)
-                        cout << "-nt    | " << "Number of threads for computation (number of physical cores IF <=0 || >= number of physical cores)" << endl;
+                        cout << "-nt    | " << "Number of threads (used for USE_OPENMP/USE_SIMD modes); set '<= 0` or '>= core count' to use all physical cores)" << endl;
             #endif
 
             return 0;

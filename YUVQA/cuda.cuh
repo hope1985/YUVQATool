@@ -45,16 +45,20 @@ __global__ void computeWSPSNR(
 
 void intit_device_buffer(int** dev_ref, int** dev_rec, double** dev_weights, double** dev_partial_sum, const  int w, int h, const double* weights, int nf );
 
-cudaError_t run_process_cuda_shared_mem_2streams(const int* ref, const int* rec, const double* weights, double* wspsnr_frame, const double w_sum, const  int w, int h, int bitDepth, int nf);
+cudaError_t wspsnr_process_cuda_shared_mem_2streams(const int* ref, const int* rec, const double* weights, double* wspsnr_frame, const double w_sum, const  int w, int h, int bitDepth, int nf);
 
-cudaError_t run_process_cuda_atomic(const int* ref, const int* rec, const double* weights, double* wspsnr_frame, const double w_sum, const  int w, int h, int bitDepth, int nf );
+cudaError_t wspsnr_process_cuda_atomic(const int* ref, const int* rec, const double* weights, double* wspsnr_frame, const double w_sum, const  int w, int h, int bitDepth, int nf );
 
-cudaError_t run_process_cuda_shared_mem(const int* ref, const int* rec, int* dev_ref, int* dev_rec, double* dev_weights, double* dev_partial_sum,const double* weights, double* wspsnr_frame, const double w_sum, const  int w, int h, int bitDepth, int nf );
+cudaError_t wspsnr_process_cuda_shared_mem(const int* ref, const int* rec, int* dev_ref, int* dev_rec, double* dev_weights, double* dev_partial_sum,const double* weights, double* wspsnr_frame, const double w_sum, const  int w, int h, int bitDepth, int nf );
 
 
 //faster than cuda atomic 
-cudaError_t run_process_cuda_shared_mem(const int* ref, const int* rec, const double* weights, double* wspsnr_frame, const double w_sum, const  int w, int h, int bitDepth, int nf );
-cudaError_t run_process_cuda(const int* ref, const int* rec, int* dev_ref, int* dev_rec, double* dev_weights, double* sqdiff_weighted, const double* weights, double* wspsnr_frame, const double w_sum, const  int w, int h, int bitDepth, int nf );
+cudaError_t wspsnr_process_cuda_shared_mem(const int* ref, const int* rec, const double* weights, double* wspsnr_frame, const double w_sum, const  int w, int h, int bitDepth, int nf );
+cudaError_t wspsnr_process_cuda(const int* ref, const int* rec, int* dev_ref, int* dev_rec, double* dev_weights, double* sqdiff_weighted, const double* weights, double* wspsnr_frame, const double w_sum, const  int w, int h, int bitDepth, int nf );
+
+
+cudaError_t psnr_process_cuda_shared_mem(const int* ref, const int* rec, int* dev_ref, int* dev_rec, double* dev_partial_sum, double* wspsnr_frame, const  int w, int h, int bitDepth, int nf);
+
 
 #endif //USE_CUDA
 
