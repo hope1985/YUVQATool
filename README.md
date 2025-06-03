@@ -1,19 +1,13 @@
 # YUVQATool
 
-**YUVQATool** is a lightweight and high-performance quality assessment tool for YUV videos. It is purly implemented in **C++** and supports acceleration via **SIMD (AVX2)** and **CUDA**.
+**YUVQATool** is a lightweight and high-performance quality assessment tool for YUV videos. It is purly implemented in **C++** and supports acceleration via **OPENMP**, **SIMD (AVX2)**, and **CUDA**.
 
 ## Features
-
-- ⚙️ Written entirely in C++
-- 🚀 SIMD (AVX2) acceleration using 
-- 🚀 OPENMP parallel computation
-- ⚡ GPU acceleration with CUDA
-- 📊 Supports computation of:
+- 📊 Supports the region of interest (ROI) or full frame computation of:
   - **PSNR** (Peak Signal-to-Noise Ratio)
   - **WS-PSNR** (Weighted-to-Spherically-uniform PSNR) for equirectangular projection (ERP) format
 
 ## Supported Formats
-
 - Raw YUV 4:2:0 video
 - Bit-depth: 8-bit (support for 10-bit can be added upon request)
 
