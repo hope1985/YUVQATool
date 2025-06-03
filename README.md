@@ -16,7 +16,7 @@
 - Optional: [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit) (CUDA ≥ 12.8, arch ≥ compute_61, code ≥ sm_61)
 
 ## Build Instructions
-Change the value of **#define MODE** macro in the **config.h** to use OPENMP, SIMD, or CUDA:
+Change the value of **MODE** macro in the **config.h** file to use OPENMP, SIMD, or CUDA:
 ```sh
 #define MODE  USE_NORMAL_LOOP   
 #define MODE  USE_OPENMP     
