@@ -25,6 +25,7 @@ static string ref_inDir = "";
 static int startFrame = 0;
 static int frames = 30;
 static int threads = 0;
+static int bd = 0;
 static int metric = PSNR_METRIC;
 static string metric_name = "PSNR";
 static std::vector<int>* roiY = NULL;
@@ -553,6 +554,8 @@ void compute_psnr_file(string filename, string ref_filename, int W, int H, int s
 		double* psnr_framesU = new double[batch_size];
 		double* psnr_framesV = new double[batch_size];
 
+		
+
 		//Read frames as many as batch_size
 		if (bd == 8)
 		{
@@ -583,9 +586,9 @@ void compute_psnr_file(string filename, string ref_filename, int W, int H, int s
 			vector<int> refPicV = refVbatch;
 			vector<int> recPicV = recVbatch;
 
-			psnr_process_cuda_shared_mem(refPicY.data(), recPicY.data(), dev_refY, dev_recY, dev_partial_sumY, psnr_framesY, W, H, bd, batch_size);
-			psnr_process_cuda_shared_mem(refPicU.data(), recPicU.data(), dev_refU, dev_recU, dev_partial_sumU, psnr_framesU, W / 2, H / 2, bd, batch_size);
-			psnr_process_cuda_shared_mem(refPicV.data(), recPicV.data(), dev_refV, dev_recV, dev_partial_sumV, psnr_framesV, W / 2, H / 2, bd, batch_size);
+			psnr_process_cuda(refPicY.data(), recPicY.data(), dev_refY, dev_recY, dev_partial_sumY, psnr_framesY, W, H, bd, batch_size);
+			psnr_process_cuda(refPicU.data(), recPicU.data(), dev_refU, dev_recU, dev_partial_sumU, psnr_framesU, W / 2, H / 2, bd, batch_size);
+			psnr_process_cuda(refPicV.data(), recPicV.data(), dev_refV, dev_recV, dev_partial_sumV, psnr_framesV, W / 2, H / 2, bd, batch_size);
 
 			auto et = std::chrono::high_resolution_clock::now();
 			duration = chrono::duration_cast<chrono::milliseconds>(et - st).count() / 1000.0;
@@ -619,9 +622,9 @@ void compute_psnr_file(string filename, string ref_filename, int W, int H, int s
 			vector<int> refPicV = refVbatch;
 			vector<int> recPicV = recVbatch;
 
-			psnr_process_cuda_shared_mem(refPicY.data(), recPicY.data(), dev_refY, dev_recY, dev_partial_sumY, psnr_framesY, W, H, bd, batch_size);
-			psnr_process_cuda_shared_mem(refPicU.data(), recPicU.data(), dev_refU, dev_recU, dev_partial_sumU, psnr_framesU, W / 2, H / 2, bd, batch_size);
-			psnr_process_cuda_shared_mem(refPicV.data(), recPicV.data(), dev_refV, dev_recV, dev_partial_sumV, psnr_framesV, W / 2, H / 2, bd, batch_size);
+			psnr_process_cuda(refPicY.data(), recPicY.data(), dev_refY, dev_recY, dev_partial_sumY, psnr_framesY, W, H, bd, batch_size);
+			psnr_process_cuda(refPicU.data(), recPicU.data(), dev_refU, dev_recU, dev_partial_sumU, psnr_framesU, W / 2, H / 2, bd, batch_size);
+			psnr_process_cuda(refPicV.data(), recPicV.data(), dev_refV, dev_recV, dev_partial_sumV, psnr_framesV, W / 2, H / 2, bd, batch_size);
 
 			auto et = std::chrono::high_resolution_clock::now();
 			duration = chrono::duration_cast<chrono::milliseconds>(et - st).count() / 1000.0;
@@ -738,13 +741,11 @@ int main(int argc, char* argv[])
 			cout << "Argument     |" << "Description/Options" << endl;
 			cout << "-i     | " << "Filepath of the input YUV file" << endl;
 			cout << "-r     | " << "Filepath of the reference YUV file" << endl;
-			//cout << "-id    | " << "Root directory of the input YUV file" << endl;
-			//cout << "-rd    | " << "Root directory of the reference YUV file" << endl;
 			cout << "-w     | " << "Width of the YUV file" << endl;
 			cout << "-h     | " << "Height of the YUV file" << endl;
 			cout << "-bd    | " << "Bit-depth of the YUV file (8 or 10)" << endl;
-			cout << "-sf    | " << "Start frame index to begin computing the quality metric" << endl;
-			cout << "-nf    | " << "Number of frames to compute quality metric" << endl;
+			cout << "-sf    | " << "Start frame index to compuute the quality" << endl;
+			cout << "-nf    | " << "Number of frames to compute quality" << endl;
 			cout << "-qm    | " << "Quality metric type ('0' = PSNR, '1' = WSPSNR for ERP format)" << endl;
 			cout << "-roi   | " << "Region of interest for quality computation as [Top, Bottom, Left, Right]" << endl;
 #if (MODE == USE_OPENMP || MODE == USE_SIMD)
@@ -865,7 +866,7 @@ int main(int argc, char* argv[])
 	}
 	else {
 		ref_inDir += "/";
-	}
+	}*/
 #endif
 	std::cout << "=============================================" << std::endl;
 #if MODE==USE_SIMD

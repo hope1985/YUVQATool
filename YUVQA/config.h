@@ -10,7 +10,7 @@
 #define USE_OPENMP 3
 #define USE_NORMAL_LOOP 4
 
-#define MODE USE_SIMD
+#define MODE USE_CUDA
 
 
 #define DTYPE_DOUBLE 10
