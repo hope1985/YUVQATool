@@ -143,12 +143,6 @@ void compute_wspsnr_file(string filename, string ref_filename, int W, int H, int
 		if (bd == 8)
 		{
 
-			//vector<unsigned char> ref_Y_img, ref_U_img, ref_V_img;
-			//std::tie(ref_Y_img, ref_U_img, ref_V_img) = read_YUV420_frame<unsigned char, unsigned char>(ref_yuv_f, W, H, bd);
-
-			//vector<unsigned char> Y_img, U_img, V_img;
-			//std::tie(Y_img, U_img, V_img) = read_YUV420_frame<unsigned char, unsigned char>(yuv_f, W, H, bd);
-
 			read_YUV420_frame<unsigned char, COMPUTE_DTYPE>(ref_yuv_f, ref_Y_img, ref_U_img, ref_V_img, W, H, bd);
 			read_YUV420_frame<unsigned char, COMPUTE_DTYPE>(yuv_f, Y_img, U_img, V_img, W, H, bd);
 
@@ -164,12 +158,6 @@ void compute_wspsnr_file(string filename, string ref_filename, int W, int H, int
 		}
 		else
 		{
-
-			//vector<unsigned short> ref_Y_img, ref_U_img, ref_V_img;
-			//std::tie(ref_Y_img, ref_U_img, ref_V_img) = read_YUV420_frame<unsigned short, unsigned short>(ref_yuv_f, W, H, bd);
-
-			//vector<unsigned short> Y_img, U_img, V_img;
-			//std::tie(Y_img, U_img, V_img) = read_YUV420_frame<unsigned short, unsigned short>(yuv_f, W, H, bd);
 
 			read_YUV420_frame<unsigned short, COMPUTE_DTYPE>(ref_yuv_f, ref_Y_img, ref_U_img, ref_V_img, W, H, bd);
 			read_YUV420_frame<unsigned short, COMPUTE_DTYPE>(yuv_f, Y_img, U_img, V_img, W, H, bd);
@@ -208,8 +196,6 @@ void compute_wspsnr_file(string filename, string ref_filename, int W, int H, int
 		//Read frames as many as batch_size
 		if (bd == 8)
 		{
-
-
 
 			for (int z = 0; z < batch_size; z++)
 			{
@@ -370,13 +356,6 @@ void compute_wspsnr_file(string filename, string ref_filename, int W, int H, int
 	_aligned_free(Y_img);
 	_aligned_free(U_img);
 	_aligned_free(V_img);
-	/*free(ref_Y_img);
-	free(ref_U_img);
-	free(ref_V_img);
-	free(Y_img);
-	free(U_img);
-	free(V_img);*/
-
 #else
 	free(ref_Y_img);
 	free(ref_U_img);
@@ -666,12 +645,6 @@ void compute_psnr_file(string filename, string ref_filename, int W, int H, int s
 	_aligned_free(Y_img);
 	_aligned_free(U_img);
 	_aligned_free(V_img);
-	/*free(ref_Y_img);
-	free(ref_U_img);
-	free(ref_V_img);
-	free(Y_img);
-	free(U_img);
-	free(V_img);*/
 
 #else
 	free(ref_Y_img);
